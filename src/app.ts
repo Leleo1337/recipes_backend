@@ -9,7 +9,6 @@ import comments from './routes/comments';
 import rateLimiter from './middlewares/rateLimiter';
 import errorHandlerMiddleware from './middlewares/errorHandler';
 import routeNotFound from './middlewares/routeNotFound';
-import authMiddleware from './middlewares/auth';
 
 const app = express();
 
