@@ -5,7 +5,7 @@ import { Error as MongooseError } from 'mongoose';
 
 function errorHandlerMiddleware(err: any, req: Request, res: Response, next: NextFunction): any {
 	const customError = {
-		msg: 'Algo deu errado, ,tente novamente mais tarde',
+		msg: 'Something went wrong!, try again later.',
 		statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
 	};
 
@@ -21,12 +21,13 @@ function errorHandlerMiddleware(err: any, req: Request, res: Response, next: Nex
 	}
 
 	if (err instanceof MongooseError.CastError) {
-		customError.msg = `Nenhum item com id: ${err.value} encontrado`;
+		customError.msg = `Invalid ID: ${err.value} is not a valid identifier`;
 		customError.statusCode = StatusCodes.BAD_REQUEST;
 	}
 
-	if (err.cause && err.cause.code === 11000) {
-		customError.msg = 'Usuario já cadastrado';
+	if (err.code === 11000) {
+		const duplicatedField = Object.keys(err.keyValue)[0];
+		customError.msg = `The ${duplicatedField} '${err.keyValue[duplicatedField]}' is already in use.`;
 		customError.statusCode = StatusCodes.BAD_REQUEST;
 	}
 
