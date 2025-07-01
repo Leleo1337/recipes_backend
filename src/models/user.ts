@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import IUser from '../interfaces/IUser';
-import { hashValue } from '../utils/bcrypt';
+import { compareValue, hashValue } from '../utils/bcrypt';
 import env from '../config/env';
 import notFound from '../errors/notFound';
 
@@ -38,11 +38,11 @@ userSchema.methods.createToken = function () {
 	return jwt.sign({ userID: this._id, name: this.name }, env.JWT_SECRET, { expiresIn: '30d' });
 };
 
-userSchema.methods.comparePassword = function () {
+userSchema.methods.comparePassword = function (password: string) {
 	if (!env.JWT_SECRET) {
 		return;
 	}
-	return jwt.sign({ userID: this._id, name: this.name }, env.JWT_SECRET, { expiresIn: '30d' });
+	return compareValue(password, this.password);
 };
 
 const User = mongoose.model('User', userSchema)
