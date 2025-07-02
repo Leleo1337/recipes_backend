@@ -20,7 +20,7 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
 		if (!user) {
 			throw new Unauthenticated('You must be logged to access this');
 		}
-		req.user = user;
+		req.user = { userID: user._id, username: user.name };
 		next();
 	} catch (error) {
 		throw new Unauthenticated('You must be logged to access this');
