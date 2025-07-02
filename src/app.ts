@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import auth from './routes/auth';
 import recipes from './routes/recipes';
+import user from './routes/user'
 import comments from './routes/comments';
 
 import rateLimiter from './middlewares/rateLimiter';
@@ -22,6 +23,7 @@ app.use(rateLimiter);
 // routes
 
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/user', user);
 app.use('/api/v1/recipes', recipes);
 app.use('/api/v1/recipes/:recipeID/comments', comments);
 
