@@ -1,14 +1,19 @@
 import express from 'express';
 import validate from '../middlewares/validateJoi';
 import { recipeSchema } from '../validators/recipeSchema';
-import { createRecipe, getAllRecipes, getRecipe, editRecipe, deleteRecipe } from '../controllers/recipes';
+import { createRecipe, getAllRecipes, getRecipe, editRecipe, deleteRecipe, getUserRecipes } from '../controllers/recipes';
 import authMiddleware from '../middlewares/auth';
 
 const router = express.Router();
 
 // - /api/v1/recipes
+
+// public
 router.get('/', getAllRecipes);
 router.get('/:recipeID', getRecipe);
+
+// private
+router.get('/myRecipes', authMiddleware, getUserRecipes);
 router.post('/', authMiddleware, validate(recipeSchema), createRecipe);
 router.patch('/:recipeID', authMiddleware, validate(recipeSchema), editRecipe);
 router.delete('/:recipeID', authMiddleware, deleteRecipe);
