@@ -22,13 +22,6 @@ export async function getRecipe(req: Request, res: Response) {
 	res.status(StatusCodes.OK).json({ success: true, data: recipe });
 }
 
-export async function getUserRecipes(req: Request, res: Response) {
-	const { userID } = req.user;
-	const recipe = await Recipe.find({ createdBy: userID }).sort('-date');
-
-	res.status(StatusCodes.OK).json({ success: true, data: recipe });
-}
-
 export async function createRecipe(req: Request, res: Response) {
 	const { userID } = req.user;
 	const { image, title, instructions } = req.body;
@@ -62,6 +55,7 @@ export async function deleteRecipe(req: Request, res: Response) {
 
 	const deletedRecipe = await Recipe.findOneAndDelete({ _id: recipeID, createdBy: userID });
 
+	console.log(deletedRecipe)
 	if (!deletedRecipe) {
 		throw new Forbidden('You dont own this recipe');
 	}
