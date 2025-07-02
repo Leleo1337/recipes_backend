@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const recipeSchema = new mongoose.Schema(
 	{
+		createdBy: {
+			type: mongoose.Types.ObjectId,
+			ref: 'User',
+			required: true,
+		},
 		image: {
 			type: String,
 			required: false,
@@ -16,10 +21,9 @@ const recipeSchema = new mongoose.Schema(
 			required: [true, 'Instructions may not be empty'],
 			trim: true,
 		},
-		createdBy: {
-			type: mongoose.Types.ObjectId,
-			ref: 'User',
-			required: true,
+		likesCount: {
+			type: Number,
+			default: 0,
 		},
 	},
 	{ timestamps: true },
