@@ -8,7 +8,7 @@ export async function register(req: Request, res: Response) {
 	const user = await User.create({ name, email, password });
 	const token = user.createToken();
 
-	res.status(StatusCodes.OK).json({ success: true, createdUser: { userID: user._id, username: user.name }, token });
+	res.status(StatusCodes.CREATED).json({ success: true, createdUser: { userID: user._id, username: user.name }, token });
 }
 
 export async function login(req: Request, res: Response) {
