@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Recipe from '../models/recipe';
-import notFound from '../errors/notFound';
+import Like from '../models/like';
+import NotFound from '../errors/notFound';
 import Forbidden from '../errors/Forbidden';
 
 export async function getAllRecipes(req: Request, res: Response) {
-	const recipes = await Recipe.find().sort("-likesCount");
+	const recipes = await Recipe.find().sort('-likesCount -createdAt');
 
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
@@ -16,7 +17,7 @@ export async function getRecipe(req: Request, res: Response) {
 	const recipe = await Recipe.findById(recipeID);
 
 	if (!recipe) {
-		throw new notFound('Recipe not found');
+		throw new NotFound('Recipe not found');
 	}
 
 	res.status(StatusCodes.OK).json({ success: true, data: recipe });
@@ -49,13 +50,34 @@ export async function editRecipe(req: Request, res: Response) {
 	res.status(StatusCodes.OK).json({ success: true, updatedRecipe: editedRecipe });
 }
 
+export async function likeRecipe(req: Request, res: Response) {
+	const { userID, username } = req.user;
+	const { recipeID } = req.params;
+
+	const recipe = await Recipe.findById(recipeID);
+	if (!recipe) {
+		throw new NotFound('Recipe not found');
+	}
+
+	const hasLiked = await Like.findOne({ likedBy: userID, recipeID });
+
+	if (!hasLiked) {
+		await Recipe.findByIdAndUpdate(recipeID, { $inc: { likesCount: 1 } });
+		await Like.create({ likedBy: userID, recipeID });
+		res.status(StatusCodes.OK).json({ success: true, msg: `User ${username} liked this post!` });
+	} else {
+		await Recipe.findByIdAndUpdate(recipeID, { $inc: { likesCount: -1 } });
+		await Like.deleteOne({ likedBy: userID, recipeID });
+		res.status(StatusCodes.OK).json({ success: true, msg: `User ${username} removed his like from this post!` });
+	}
+}
+
 export async function deleteRecipe(req: Request, res: Response) {
 	const { recipeID } = req.params;
 	const { userID } = req.user;
 
 	const deletedRecipe = await Recipe.findOneAndDelete({ _id: recipeID, createdBy: userID });
 
-	console.log(deletedRecipe)
 	if (!deletedRecipe) {
 		throw new Forbidden('You dont own this recipe');
 	}
