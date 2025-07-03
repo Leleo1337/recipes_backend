@@ -13,7 +13,7 @@ export async function getComments(req: Request, res: Response) {
 		throw new BadRequest('Recipe not found!');
 	}
 
-	const comments = await Comment.find({ recipeId: recipeID });
+	const comments = await Comment.find({ recipeID: recipeID });
 
 	res.status(StatusCodes.OK).json({ success: true, length: comments.length, data: comments });
 }
@@ -29,7 +29,7 @@ export async function createComment(req: Request, res: Response) {
 		throw new BadRequest('Recipe not found!');
 	}
 
-	const createdComment = await Comment.create({ recipeId: recipeID, createdBy: userID, text: text });
+	const createdComment = await Comment.create({ recipeID: recipeID, createdBy: userID, text: text });
 
 	res.status(StatusCodes.CREATED).json({ success: true, created: createdComment });
 }
@@ -46,7 +46,7 @@ export async function updateComment(req: Request, res: Response) {
 	}
 
 	const updatedComment = await Comment.findOneAndUpdate(
-		{ _id: commentID, createdBy: userID, recipeId: recipeID },
+		{ _id: commentID, createdBy: userID, recipeID: recipeID },
 		{ text },
 		{
 			new: true,
@@ -70,7 +70,7 @@ export async function deleteComment(req: Request, res: Response) {
 		throw new BadRequest('Recipe not found');
 	}
 
-	const deletedComment = await Comment.findOneAndDelete({ _id: commentID, recipeId: recipeID, createdBy: userID });
+	const deletedComment = await Comment.findOneAndDelete({ _id: commentID, recipeID: recipeID, createdBy: userID });
 	if (!deletedComment) {
 		throw new Forbidden('You dont own this comment');
 	}
