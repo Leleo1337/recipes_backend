@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import IUser from '../interfaces/IUser';
 import { compareValue, hashValue } from '../utils/bcrypt';
 import env from '../config/env';
-import notFound from '../errors/notFound';
+import NotFound from '../errors/notFound';
 
 const userSchema = new mongoose.Schema<IUser>({
 	name: {
@@ -32,7 +32,7 @@ userSchema.pre('save', async function () {
 
 userSchema.methods.createToken = function () {
 	if (!env.JWT_SECRET) {
-		throw new notFound('Please enter a JWT_SECRET in your .env file');
+		throw new NotFound('Please enter a JWT_SECRET in your .env file');
 	}
 
 	return jwt.sign({ userID: this._id, name: this.name }, env.JWT_SECRET, { expiresIn: '30d' });
