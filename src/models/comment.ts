@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema(
 	{
-		recipeId: {
+		recipeID: {
 			type: mongoose.Types.ObjectId,
 			ref: 'Recipe',
 			required: true,
@@ -13,6 +13,7 @@ const commentSchema = new mongoose.Schema(
 		},
 		text: {
 			type: String,
+			maxLength: 30,
 			required: [true, 'comment may not be empty'],
 		},
 	},
