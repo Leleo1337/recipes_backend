@@ -1,3 +1,4 @@
+import { string } from 'joi';
 import mongoose from 'mongoose';
 
 const recipeSchema = new mongoose.Schema(
@@ -16,10 +17,35 @@ const recipeSchema = new mongoose.Schema(
 			type: String,
 			required: [true, 'You must insert a title'],
 		},
-		instructions: {
+		description: {
 			type: String,
-			required: [true, 'Instructions may not be empty'],
-			trim: true,
+			required: [true, 'You must insert a description'],
+		},
+		category: {
+			type: String,
+			enum: ['Café da manha', 'Almoço', 'Jantar', 'Entrada', 'Sobremesa', 'Bebida', 'Lanche', 'Outro'],
+			default: 'Outro',
+			required: true,
+		},
+		difficulty: {
+			type: String, 
+			enum: ['Facil', 'Medio', 'Dificil'],
+			default: 'Medio',
+			required: true
+		},
+		visibility: {
+			type: String,
+			enum: ['Public', 'Private'],
+			default: 'Public'
+		},
+		instructions: {
+			type: [
+				{
+					step: { type: Number, required: true },
+					description: { type: String, required: true },
+				},
+			],
+			required: true,
 		},
 		likesCount: {
 			type: Number,
