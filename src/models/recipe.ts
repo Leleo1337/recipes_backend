@@ -1,4 +1,3 @@
-import { required, string } from 'joi';
 import mongoose from 'mongoose';
 
 const recipeSchema = new mongoose.Schema(
@@ -44,14 +43,15 @@ const recipeSchema = new mongoose.Schema(
 		},
 		portions: {
 			type: Number,
-			required: true,
+			required: false,
 		},
 		ingredients: {
 			type: [
 				{
 					name: { type: String, required: true },
 					quantity: { type: String, required: true },
-					unit: { type: String, required: true },
+					unit: { type: String, required: false },
+					_id: false,
 				},
 			],
 			required: true,
@@ -61,6 +61,7 @@ const recipeSchema = new mongoose.Schema(
 				{
 					step: { type: Number, required: true },
 					description: { type: String, required: true },
+					_id: false,
 				},
 			],
 			required: true,
