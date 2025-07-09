@@ -1,4 +1,4 @@
-import { string } from 'joi';
+import { required, string } from 'joi';
 import mongoose from 'mongoose';
 
 const recipeSchema = new mongoose.Schema(
@@ -37,6 +37,14 @@ const recipeSchema = new mongoose.Schema(
 			type: String,
 			enum: ['Public', 'Private'],
 			default: 'Public',
+		},
+		cookingTime: {
+			type: Number,
+			required: true,
+		},
+		portions: {
+			type: Number,
+			required: true,
 		},
 		ingredients: {
 			type: [
