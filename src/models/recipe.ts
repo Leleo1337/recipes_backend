@@ -28,15 +28,25 @@ const recipeSchema = new mongoose.Schema(
 			required: true,
 		},
 		difficulty: {
-			type: String, 
+			type: String,
 			enum: ['Facil', 'Medio', 'Dificil'],
 			default: 'Medio',
-			required: true
+			required: true,
 		},
 		visibility: {
 			type: String,
 			enum: ['Public', 'Private'],
-			default: 'Public'
+			default: 'Public',
+		},
+		ingredients: {
+			type: [
+				{
+					name: { type: String, required: true },
+					quantity: { type: String, required: true },
+					unit: { type: String, required: true },
+				},
+			],
+			required: true,
 		},
 		instructions: {
 			type: [
