@@ -30,8 +30,9 @@ function errorHandlerMiddleware(err: any, req: Request, res: Response, next: Nex
 		customError.msg = `The ${duplicatedField} '${err.keyValue[duplicatedField]}' is already in use.`;
 		customError.statusCode = StatusCodes.BAD_REQUEST;
 	}
+	
+	console.log(err)
 
-	console.log(err);
 	return res.status(customError.statusCode).json({ msg: customError.msg });
 }
 
