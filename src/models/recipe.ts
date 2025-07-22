@@ -14,11 +14,11 @@ const recipeSchema = new mongoose.Schema(
 		},
 		title: {
 			type: String,
-			required: [true, 'You must insert a title'],
+			required: true,
 		},
 		description: {
 			type: String,
-			required: [true, 'You must insert a description'],
+			required: true,
 		},
 		category: {
 			type: String,

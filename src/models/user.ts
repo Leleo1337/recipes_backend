@@ -8,7 +8,7 @@ import NotFound from '../errors/notFound';
 const userSchema = new mongoose.Schema<IUser>({
 	name: {
 		type: String,
-		required: [true, 'You must insert a name'],
+		required: true,
 		unique: true,
 	},
 	email: {
@@ -17,12 +17,12 @@ const userSchema = new mongoose.Schema<IUser>({
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 			'Insert a valid email',
 		],
-		unique: [true, 'Email already in use'],
+		unique: true,
 	},
 	password: {
 		type: String,
-		required: [true, 'Insert a password'],
-		minLength: [6, 'password too short'],
+		required: true,
+		minLength: 6,
 	},
 });
 
@@ -45,6 +45,6 @@ userSchema.methods.comparePassword = function (password: string) {
 	return compareValue(password, this.password);
 };
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema);
 
-export default User
+export default User;
