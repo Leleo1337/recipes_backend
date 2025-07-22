@@ -7,8 +7,8 @@ export const registerSchema = Joi.object({
 });
 
 export const loginSchema = Joi.object({
-	name: Joi.string().min(3),
-	email: Joi.string().email(),
+	name: Joi.string().min(3).messages({'string.empty': '"User" is not allowed to be empty'}),
+	email: Joi.string().email().messages({'string.empty': '"User" is not allowed to be empty'}),
 	password: Joi.string().required(),
 }).or('name', 'email').messages({
     'object.missing': 'You must provide either a username or an email along with the password.'
