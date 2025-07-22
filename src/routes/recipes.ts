@@ -1,7 +1,7 @@
 import express from 'express';
 import validate from '../middlewares/validateJoi';
 import { recipeSchema } from '../validators/recipeSchema';
-import { createRecipe, getAllRecipes, getRecipe, editRecipe, deleteRecipe, likeRecipe } from '../controllers/recipes';
+import { createRecipe, getAllRecipes, getFeaturedRecipes, getRecipe, editRecipe, deleteRecipe, likeRecipe } from '../controllers/recipes';
 import authMiddleware from '../middlewares/auth';
 
 const router = express.Router();
@@ -10,6 +10,7 @@ const router = express.Router();
 
 // public
 router.get('/', getAllRecipes);
+router.get('/featured', getFeaturedRecipes);
 router.get('/:recipeID', getRecipe);
 
 // private
