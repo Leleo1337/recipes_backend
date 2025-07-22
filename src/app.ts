@@ -15,13 +15,6 @@ const app = express();
 app.set('trust proxy', true);
 app.use(express.json());
 
-app.use((req, res, next) => {
-	console.log('IP:', req.ip, '| Headers:', req.headers['x-forwarded-for']);
-	next();
-});
-
-app.use(rateLimiter);
-
 // security
 app.use(helmet());
 app.use(cors());
