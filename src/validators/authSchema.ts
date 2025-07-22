@@ -9,7 +9,7 @@ export const registerSchema = Joi.object({
 export const loginSchema = Joi.object({
 	name: Joi.string().min(3),
 	email: Joi.string().email(),
-	password: Joi.string().min(6).required(),
+	password: Joi.string().required(),
 }).or('name', 'email').messages({
     'object.missing': 'You must provide either a username or an email along with the password.'
 });
