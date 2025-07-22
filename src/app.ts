@@ -12,7 +12,7 @@ import errorHandlerMiddleware from './middlewares/errorHandler';
 import routeNotFound from './middlewares/routeNotFound';
 
 const app = express();
-
+app.set('trust proxy', 1);
 app.use(express.json());
 
 // security
