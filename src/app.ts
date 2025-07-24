@@ -3,8 +3,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 
 import auth from './routes/auth';
+import userData from './routes/userData';
 import recipes from './routes/recipes';
-import user from './routes/user';
 import comments from './routes/comments';
 
 import rateLimiter from './middlewares/rateLimiter';
@@ -12,7 +12,7 @@ import errorHandlerMiddleware from './middlewares/errorHandler';
 import routeNotFound from './middlewares/routeNotFound';
 
 const app = express();
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 app.use(express.json());
 
 // security
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/user', user);
+app.use('/api/v1/me', userData);
 app.use('/api/v1/recipes', recipes);
 app.use('/api/v1/recipes/:recipeID/comments', comments);
 
