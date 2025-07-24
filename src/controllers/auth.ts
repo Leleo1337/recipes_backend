@@ -4,8 +4,8 @@ import User from '../models/user';
 import BadRequest from '../errors/badRequest';
 
 export async function register(req: Request, res: Response) {
-	const { name, email, password } = req.body;
-	const user = await User.create({ name, email, password });
+	const { profilePicture, name, email, password } = req.body;
+	const user = await User.create({ name, profilePicture, email, password });
 	const token = user.createToken();
 
 	res.status(StatusCodes.CREATED).json({ success: true, createdUser: { userID: user._id, username: user.name }, token });

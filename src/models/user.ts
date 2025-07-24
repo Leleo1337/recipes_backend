@@ -6,6 +6,10 @@ import env from '../config/env';
 import NotFound from '../errors/notFound';
 
 const userSchema = new mongoose.Schema<IUser>({
+	profilePicture: {
+		type: String,
+		required: false,
+	},
 	name: {
 		type: String,
 		required: true,
