@@ -25,5 +25,5 @@ export async function getUserLikedRecipes(req: Request, res: Response) {
 	const likes = await Like.find({ likedBy: userID }).populate('recipeID');
 	const likedRecipes = likes.map((like) => like.recipeID).filter((recipe) => recipe !== null);
 
-	res.status(StatusCodes.OK).json({ success: true, length: likes.length, data: likedRecipes });
+	res.status(StatusCodes.OK).json({ success: true, length: likedRecipes.length, data: likedRecipes });
 }
