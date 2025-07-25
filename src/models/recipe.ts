@@ -22,14 +22,14 @@ const recipeSchema = new mongoose.Schema(
 		},
 		category: {
 			type: String,
-			enum: ['Café da manha', 'Almoço', 'Jantar', 'Entrada', 'Sobremesa', 'Bebida', 'Lanche', 'Outro'],
+			enum: ['cafe da manha', 'almoço', 'jantar', 'entrada', 'sobremesa', 'bebida', 'lanche', 'outro'],
 			default: 'Outro',
 			required: true,
 		},
 		difficulty: {
 			type: String,
-			enum: ['Facil', 'Medio', 'Dificil'],
-			default: 'Medio',
+			enum: ['facil', 'medio', 'dificil'],
+			default: 'medio',
 			required: true,
 		},
 		visibility: {
