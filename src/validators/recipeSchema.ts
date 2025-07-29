@@ -2,6 +2,8 @@ import Joi from 'joi';
 
 export const recipeSchema = Joi.object({
 	image: Joi.string().uri().optional(),
+	creatorUsername: Joi.string().required(),
+	creatorProfilePicture: Joi.string().optional(),
 	title: Joi.string().trim().min(3).required(),
 	description: Joi.string().trim().required(),
 	category: Joi.string().valid('cafe da manha', 'almoço', 'jantar', 'entrada', 'sobremesa', 'bebida', 'lanche', 'outro').required(),
