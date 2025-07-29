@@ -34,7 +34,6 @@ export async function createRecipe(req: Request, res: Response) {
 	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions } = req.body;
 
 	if (!user) throw new NotFound('User not found!');
-
 	const newRecipe = await Recipe.create({
 		createdBy: userID,
 		creatorUsername: user?.name,
