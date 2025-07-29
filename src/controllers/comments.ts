@@ -4,6 +4,7 @@ import Comment from '../models/comment';
 import Recipe from '../models/recipe';
 import BadRequest from '../errors/badRequest';
 import Forbidden from '../errors/Forbidden';
+import User from '../models/user';
 
 export async function getComments(req: Request, res: Response) {
 	const { recipeID } = req.params;
@@ -12,26 +13,25 @@ export async function getComments(req: Request, res: Response) {
 	if (!recipe) {
 		throw new BadRequest('Recipe not found!');
 	}
-
 	const comments = await Comment.find({ recipeID: recipeID });
 
 	res.status(StatusCodes.OK).json({ success: true, length: comments.length, data: comments });
 }
 
 export async function createComment(req: Request, res: Response) {
-	const { text } = req.body;
-	const { recipeID } = req.params;
 	const { userID } = req.user;
+	const { recipeID } = req.params;
+	const { text } = req.body;
 
 	const recipe = await Recipe.findById(recipeID);
+	if (!recipe) throw new BadRequest('Recipe not found!');
 
-	if (!recipe) {
-		throw new BadRequest('Recipe not found!');
-	}
+	const user = await User.findById(userID);
+	if (!user) throw new BadRequest('User not found!');
 
-	const createdComment = await Comment.create({ recipeID: recipeID, createdBy: userID, text: text });
+	const comment = await Comment.create({ recipeID: recipeID, createdBy: userID, profilePicture: user.profilePicture, username: user.name, text: text });
 
-	res.status(StatusCodes.CREATED).json({ success: true, created: createdComment });
+	res.status(StatusCodes.CREATED).json({ success: true, created: comment });
 }
 
 export async function updateComment(req: Request, res: Response) {

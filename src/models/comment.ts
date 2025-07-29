@@ -1,3 +1,4 @@
+import { required, string } from 'joi';
 import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema(
@@ -9,6 +10,14 @@ const commentSchema = new mongoose.Schema(
 		},
 		createdBy: {
 			type: mongoose.Types.ObjectId,
+			required: true,
+		},
+		profilePicture: {
+			type: String,
+			required: false,
+		},
+		username: {
+			type: String,
 			required: true,
 		},
 		text: {
