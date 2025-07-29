@@ -4,9 +4,10 @@ import Recipe from '../models/recipe';
 import Like from '../models/like';
 import NotFound from '../errors/notFound';
 import Forbidden from '../errors/Forbidden';
+import User from 'models/user';
 
 export async function getAllRecipes(req: Request, res: Response) {
-	const recipes = (await Recipe.find({visibility: 'Public'}).sort('-likesCount -createdAt')).splice(3);
+	const recipes = (await Recipe.find({ visibility: 'Public' }).sort('-likesCount -createdAt')).splice(3);
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
 
@@ -29,9 +30,15 @@ export async function getRecipe(req: Request, res: Response) {
 
 export async function createRecipe(req: Request, res: Response) {
 	const { userID } = req.user;
+	const user = await User.findById(userID);
 	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions } = req.body;
+
+	if (!user) throw new NotFound('User not found!');
+	
 	const newRecipe = await Recipe.create({
 		createdBy: userID,
+		creatorUsername: user?.name,
+		creatorProfilePicture: user?.profilePicture,
 		image,
 		title,
 		description,
