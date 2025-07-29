@@ -6,7 +6,7 @@ import NotFound from '../errors/notFound';
 import Forbidden from '../errors/Forbidden';
 
 export async function getAllRecipes(req: Request, res: Response) {
-	const recipes = (await Recipe.find().sort('-likesCount -createdAt')).splice(3);
+	const recipes = (await Recipe.find({visibility: 'Public'}).sort('-likesCount -createdAt')).splice(3);
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
 
