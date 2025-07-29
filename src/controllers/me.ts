@@ -10,12 +10,12 @@ export async function getUserInfo(req: Request, res: Response) {
 	const { userID } = req.user;
 	const user = await User.findById(userID);
 
-	if(!user){
-		throw new Unauthenticated('User not found')
+	if (!user) {
+		throw new Unauthenticated('User not found');
 	}
-	console.log(user)
+	console.log(user);
 
-	res.status(StatusCodes.OK).json({user: {username: user.name, profilePicture: user.profilePicture}})
+	res.status(StatusCodes.OK).json({ user: { userID: user._id, username: user.name, profilePicture: user.profilePicture } });
 }
 
 export async function getUserRecipes(req: Request, res: Response) {
