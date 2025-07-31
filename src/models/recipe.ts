@@ -7,14 +7,6 @@ const recipeSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
-		creatorUsername: {
-			type: String,
-			required: true,
-		},
-		creatorProfilePicture: {
-			type: String,
-			required: false,
-		},
 		image: {
 			type: String,
 			required: false,
