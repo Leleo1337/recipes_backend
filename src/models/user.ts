@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose, Types } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import IUser from '../interfaces/IUser';
 import { compareValue, hashValue } from '../utils/bcrypt';
@@ -8,7 +8,7 @@ import NotFound from '../errors/notFound';
 const userSchema = new mongoose.Schema<IUser>({
 	profilePicture: {
 		type: String,
-		required: false,
+		default: '',
 	},
 	name: {
 		type: String,
@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema<IUser>({
 	},
 	email: {
 		type: String,
+		required: true,
 		match: [
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 			'Insert a valid email',
@@ -28,6 +29,21 @@ const userSchema = new mongoose.Schema<IUser>({
 		required: true,
 		minLength: 6,
 	},
+	bio: {
+		type: String,
+		default: '',
+	},
+	socialLinks: {
+		type: new mongoose.Schema(
+			{
+				facebook: { type: String },
+				instagram: { type: String },
+				discord: { type: String },
+			},
+			{ _id: false },
+		),
+		default: {},
+	}
 });
 
 userSchema.pre('save', async function () {
