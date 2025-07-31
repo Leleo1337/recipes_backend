@@ -9,7 +9,6 @@ const MONGO_URI = env.MONGO_URI || ''
 async function start() {
     try {
         await connectDB(MONGO_URI);
-        app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
     } catch (error) {
         console.log(error)
     }
