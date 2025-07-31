@@ -7,19 +7,19 @@ import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
 
 export async function getAllRecipes(req: Request, res: Response) {
-	const recipes = (await Recipe.find({ visibility: 'Public' }).sort('-likesCount -createdAt')).splice(3);
+	const recipes = await Recipe.find({ visibility: 'Public' }).populate('createdBy', 'name profilePicture').sort('-likesCount -createdAt').skip(3);
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
 
 export async function getFeaturedRecipes(req: Request, res: Response) {
-	const recipes = (await Recipe.find().sort('-likesCount -createdAt')).splice(0, 3);
+	const recipes = (await Recipe.find().sort('-likesCount -createdAt').populate('createdBy', 'name profilePicture')).splice(0, 3);
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
 
 export async function getRecipe(req: Request, res: Response) {
 	const { recipeID } = req.params;
 
-	const recipe = await Recipe.findById(recipeID);
+	const recipe = await Recipe.findById(recipeID).populate('createdBy', 'name profilePicture');
 
 	if (!recipe) {
 		throw new NotFound('Recipe not found');
@@ -36,8 +36,6 @@ export async function createRecipe(req: Request, res: Response) {
 	if (!user) throw new NotFound('User not found!');
 	const newRecipe = await Recipe.create({
 		createdBy: userID,
-		creatorUsername: user?.name,
-		creatorProfilePicture: user?.profilePicture,
 		image,
 		title,
 		description,
