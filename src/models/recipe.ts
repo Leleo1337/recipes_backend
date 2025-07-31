@@ -59,7 +59,6 @@ const recipeSchema = new mongoose.Schema(
 					name: { type: String, required: true },
 					quantity: { type: String, required: true },
 					unit: { type: String, required: false },
-					_id: false,
 				},
 			],
 			required: true,
@@ -69,7 +68,6 @@ const recipeSchema = new mongoose.Schema(
 				{
 					step: { type: Number, required: true },
 					description: { type: String, required: true },
-					_id: false,
 				},
 			],
 			required: true,
