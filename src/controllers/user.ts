@@ -4,6 +4,17 @@ import Like from '../models/like';
 import User from '../models/user';
 import Recipe from '../models/recipe';
 import NotFound from '../errors/notFound';
+import Unauthenticated from '../errors/unauthenticated';
+
+export async function getLoggedInUserInfo(req: Request, res: Response) {
+	const { userID } = req.user;
+
+	const user = await User.findById(userID).select('-password -__v -email');
+
+	if (!user) throw new Unauthenticated('You must be logged!');
+
+	res.status(StatusCodes.OK).json({ user });
+}
 
 export async function getUserInfo(req: Request, res: Response) {
 	const { userID } = req.params;
