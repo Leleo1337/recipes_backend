@@ -31,9 +31,9 @@ export async function getUserCreatedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const created = await Recipe.find({ createdBy: userID });
+	const data = await Recipe.find({ createdBy: userID });
 
-	res.status(StatusCodes.OK).json({ created });
+	res.status(StatusCodes.OK).json({ data });
 }
 
 export async function getUserLikedRecipes(req: Request, res: Response) {
@@ -42,7 +42,7 @@ export async function getUserLikedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const likes = await Like.find({ likedBy: userID }).populate('recipeID');
+	const data = await Like.find({ likedBy: userID }).populate('recipeID');
 
-	res.status(StatusCodes.OK).json({ likes });
+	res.status(StatusCodes.OK).json({ data });
 }
