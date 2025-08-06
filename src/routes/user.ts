@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/me', authMiddleware, getLoggedInUserInfo);
 router.get('/:userID', getUserInfo);
-router.get('/:userID/my-recipes', getUserCreatedRecipes);
-router.get('/:userID/liked-recipes', getUserLikedRecipes);
+router.get('/:userID/created', getUserCreatedRecipes);
+router.get('/:userID/liked', getUserLikedRecipes);
 
 export default router;
