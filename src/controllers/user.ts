@@ -31,7 +31,7 @@ export async function getUserCreatedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const data = await Recipe.find({ createdBy: userID });
+	const data = await Recipe.find({ createdBy: userID }).populate('createdBy');
 
 	res.status(StatusCodes.OK).json({ data });
 }
@@ -42,7 +42,7 @@ export async function getUserLikedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const data = await Like.find({ likedBy: userID }).populate('recipeID');
+	const data = await Like.find({ likedBy: userID }).populate('recipeID createdBy');
 
 	res.status(StatusCodes.OK).json({ data });
 }
