@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/me', authMiddleware, getLoggedInUserInfo);
 router.get('/:userID', getUserInfo);
-router.patch('/:userID', validate(userSchema), updateUser);
+router.patch('/:userID', validate(userSchema), authMiddleware, updateUser);
 router.get('/:userID/created', getUserCreatedRecipes);
 router.get('/:userID/liked', getUserLikedRecipes);
 
