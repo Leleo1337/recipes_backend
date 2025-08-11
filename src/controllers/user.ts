@@ -28,14 +28,16 @@ export async function getUserInfo(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
 	const { userID } = req.params;
 	const { name, profilePicture, bio, email, password } = req.body;
+	const loggedUserID = req.user.userID.toString();
 
 	const user = await User.findById(userID);
-
 	if (!user) throw new NotFound('User not found');
+
+	if (userID !== loggedUserID) throw new Unauthenticated('You cannot update another user profile.');
 
 	const updatedUser = await User.findByIdAndUpdate(userID, { name, profilePicture, bio, email, password }, { new: true });
 
-	res.status(StatusCodes.OK).json({ updatedUser });
+	res.status(StatusCodes.OK).json({ data: updatedUser });
 }
 
 export async function getUserCreatedRecipes(req: Request, res: Response) {
@@ -44,9 +46,9 @@ export async function getUserCreatedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const data = await Recipe.find({ createdBy: userID }).populate('createdBy');
+	const created = await Recipe.find({ createdBy: userID }).populate('createdBy');
 
-	res.status(StatusCodes.OK).json({ data });
+	res.status(StatusCodes.OK).json({ data: created });
 }
 
 export async function getUserLikedRecipes(req: Request, res: Response) {
@@ -55,7 +57,7 @@ export async function getUserLikedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const data = await Like.find({ likedBy: userID }).populate('recipeID createdBy');
+	const likes = await Like.find({ likedBy: userID }).populate('recipeID createdBy');
 
-	res.status(StatusCodes.OK).json({ data });
+	res.status(StatusCodes.OK).json({ data: likes });
 }
