@@ -7,12 +7,26 @@ import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
 
 export async function getAllRecipes(req: Request, res: Response) {
-	const recipes = await Recipe.find({ visibility: 'Public' }).populate('createdBy', 'name profilePicture').sort('-likesCount -createdAt').skip(3);
-	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
+	const page = Number(req.query.page) || 1;
+	const limit = Number(req.query.limit) || 12;
+	const skip = (page - 1) * limit;
+
+	const featuredRecipes = await Recipe.find({ visibility: 'Public' }).sort('-likesCount -createdAt').limit(3);
+	const featuredIds = featuredRecipes.map((recipe) => recipe._id);
+
+	const recipes = await Recipe.find({ visibility: 'Public', _id: { $nin: featuredIds } }) // $nin para tirar os featured, já que vão ficar na seção de cima do layout do myrecipes
+		.populate('createdBy', 'name profilePicture')
+		.sort('-likesCount -createdAt')
+		.skip(skip)
+		.limit(limit);
+
+	const totalRecipes = (await Recipe.countDocuments({ visibility: 'Public' })) - 3; // -3 por causa do featured.
+
+	res.status(StatusCodes.OK).json({ success: true, page, limit, total: totalRecipes, data: recipes });
 }
 
 export async function getFeaturedRecipes(req: Request, res: Response) {
-	const recipes = (await Recipe.find().sort('-likesCount -createdAt').populate('createdBy', 'name profilePicture')).splice(0, 3);
+	const recipes = await Recipe.find().sort('-likesCount -createdAt').populate('createdBy', 'name profilePicture').limit(3);
 	res.status(StatusCodes.OK).json({ success: true, length: recipes.length, data: recipes });
 }
 
