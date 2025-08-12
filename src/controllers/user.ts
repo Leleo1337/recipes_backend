@@ -42,13 +42,17 @@ export async function updateUser(req: Request, res: Response) {
 
 export async function getUserCreatedRecipes(req: Request, res: Response) {
 	const { userID } = req.params;
+	const page = Number(req.query.page) || 1;
+	const limit = Number(req.query.limit) || 8;
+	const skip = (page - 1) * limit;
 
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const created = await Recipe.find({ createdBy: userID }).populate('createdBy');
+	const created = await Recipe.find({ createdBy: userID }).populate('createdBy').skip(skip).limit(limit);
+	const totalCreated = await Recipe.countDocuments({ createdBy: userID });
 
-	res.status(StatusCodes.OK).json({ data: created });
+	res.status(StatusCodes.OK).json({ success: true, page, limit, total: totalCreated, data: created });
 }
 
 export async function getUserLikedRecipes(req: Request, res: Response) {
@@ -57,7 +61,9 @@ export async function getUserLikedRecipes(req: Request, res: Response) {
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
 
-	const likes = await Like.find({ likedBy: userID }).populate('recipeID createdBy');
+	const likes = await Like.find({ likedBy: userID });
+	const recipesIds = likes.map(recipe => recipe.recipeID)
 
-	res.status(StatusCodes.OK).json({ data: likes });
+	const recipes = await Recipe.find({_id: {$in: recipesIds}}).populate('createdBy')
+	res.status(StatusCodes.OK).json({ success:true, length: recipes.length, data: recipes });
 }

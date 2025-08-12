@@ -7,15 +7,20 @@ import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
 
 export async function getComments(req: Request, res: Response) {
+	const page = Number(req.query.page) || 1;
+	const limit = Number(req.query.limit) || 8;
+	const skip = (page - 1) * limit;
+
 	const { recipeID } = req.params;
 
 	const recipe = await Recipe.findById(recipeID);
 	if (!recipe) {
 		throw new BadRequest('Recipe not found!');
 	}
-	const comments = await Comment.find({ recipeID: recipeID });
+	const comments = await Comment.find({ recipeID: recipeID }).skip(skip).limit(limit);
+	const totalComments = await Comment.countDocuments({ recipeID });
 
-	res.status(StatusCodes.OK).json({ success: true, length: comments.length, data: comments });
+	res.status(StatusCodes.OK).json({ success: true, page: page, limit, total: totalComments, data: comments });
 }
 
 export async function createComment(req: Request, res: Response) {
