@@ -5,6 +5,7 @@ import Like from '../models/like';
 import NotFound from '../errors/notFound';
 import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
+import BadRequest from 'errors/badRequest';
 
 export async function getAllRecipes(req: Request, res: Response) {
 	const page = Number(req.query.page) || 1;
@@ -81,28 +82,6 @@ export async function editRecipe(req: Request, res: Response) {
 	}
 
 	res.status(StatusCodes.OK).json({ success: true, updatedRecipe: editedRecipe });
-}
-
-export async function likeRecipe(req: Request, res: Response) {
-	const { userID, username } = req.user;
-	const { recipeID } = req.params;
-
-	const recipe = await Recipe.findById(recipeID);
-	if (!recipe) {
-		throw new NotFound('Recipe not found');
-	}
-
-	const hasLiked = await Like.findOne({ likedBy: userID, recipeID });
-
-	if (!hasLiked) {
-		await Recipe.findByIdAndUpdate(recipeID, { $inc: { likesCount: 1 } });
-		await Like.create({ likedBy: userID, recipeID });
-		res.status(StatusCodes.OK).json({ success: true, msg: `User ${username} liked this post!` });
-	} else {
-		await Recipe.findByIdAndUpdate(recipeID, { $inc: { likesCount: -1 } });
-		await Like.deleteOne({ likedBy: userID, recipeID });
-		res.status(StatusCodes.OK).json({ success: true, msg: `User ${username} removed his like from this post!` });
-	}
 }
 
 export async function deleteRecipe(req: Request, res: Response) {
