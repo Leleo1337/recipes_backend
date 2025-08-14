@@ -1,6 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middlewares/auth';
-import { checkUserLike, getRecipeLikesCount, likeRecipe } from '../controllers/Likes';
+import { checkUserLike, getRecipeLikesCount, likeRecipe } from '../controllers/likes';
 
 const router = express.Router({mergeParams: true});
 
