@@ -10,10 +10,16 @@ export async function getLoggedInUserInfo(req: Request, res: Response) {
 	const { userID } = req.user;
 
 	const user = await User.findById(userID).select('-password -__v -email');
-
 	if (!user) throw new Unauthenticated('You must be logged!');
 
-	res.status(StatusCodes.OK).json({ user });
+	const recipes = await Recipe.find({ createdBy: userID });
+	const recipesCount = await Recipe.countDocuments({ createdBy: userID });
+	const recipesIds = recipes.map((recipe) => recipe._id);
+
+	const likes = await Like.countDocuments({ likedBy: userID });
+	const likesReceived = (await Like.find({ recipeID: { $in: recipesIds } })).length;
+
+	res.status(StatusCodes.OK).json({ user, createdCount: recipesCount, likedCount: likes, likesReceived });
 }
 
 export async function getUserInfo(req: Request, res: Response) {
