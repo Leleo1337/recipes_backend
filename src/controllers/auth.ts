@@ -24,8 +24,6 @@ export async function login(req: Request, res: Response) {
 		throw new BadRequest('Incorrect user or password!');
 	}
 
-	console.log(matchesPassword);
-
 	const token = user.createToken();
 
 	res.status(StatusCodes.OK).json({ success: true, token });
