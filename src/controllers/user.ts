@@ -19,7 +19,7 @@ export async function getLoggedInUserInfo(req: Request, res: Response) {
 	const likes = await Like.countDocuments({ likedBy: userID });
 	const likesReceived = (await Like.find({ recipeID: { $in: recipesIds } })).length;
 
-	res.status(StatusCodes.OK).json({ user, createdCount: recipesCount, likedCount: likes, likesReceived });
+	res.status(StatusCodes.OK).json({ user, recipes: { createdCount: recipesCount, likedCount: likes, likesReceived } });
 }
 
 export async function getUserInfo(req: Request, res: Response) {
