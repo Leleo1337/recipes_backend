@@ -12,14 +12,7 @@ export async function getLoggedInUserInfo(req: Request, res: Response) {
 	const user = await User.findById(userID).select('-password -__v -email');
 	if (!user) throw new Unauthenticated('You must be logged!');
 
-	const recipes = await Recipe.find({ createdBy: userID });
-	const recipesCount = await Recipe.countDocuments({ createdBy: userID });
-	const recipesIds = recipes.map((recipe) => recipe._id);
-
-	const likes = await Like.countDocuments({ likedBy: userID });
-	const likesReceived = (await Like.find({ recipeID: { $in: recipesIds } })).length;
-
-	res.status(StatusCodes.OK).json({ user, recipes: { createdCount: recipesCount, likedCount: likes, likesReceived } });
+	res.status(StatusCodes.OK).json({ user });
 }
 
 export async function getUserInfo(req: Request, res: Response) {
@@ -28,7 +21,14 @@ export async function getUserInfo(req: Request, res: Response) {
 	const user = await User.findById(userID).select('-password -__v');
 	if (!user) throw new NotFound('User not found');
 
-	res.status(StatusCodes.OK).json({ user });
+	const recipes = await Recipe.find({ createdBy: userID });
+	const recipesCount = await Recipe.countDocuments({ createdBy: userID });
+	const recipesIds = recipes.map((recipe) => recipe._id);
+
+	const likes = await Like.countDocuments({ likedBy: userID });
+	const likesReceived = (await Like.find({ recipeID: { $in: recipesIds } })).length;
+
+	res.status(StatusCodes.OK).json({ user, recipes: { createdCount: recipesCount, likedCount: likes, likesReceived } });
 }
 
 export async function updateUser(req: Request, res: Response) {
