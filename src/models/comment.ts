@@ -10,19 +10,12 @@ const commentSchema = new mongoose.Schema(
 		createdBy: {
 			type: mongoose.Types.ObjectId,
 			required: true,
-		},
-		profilePicture: {
-			type: String,
-			required: false,
-		},
-		username: {
-			type: String,
-			required: true,
+			ref: 'User',
 		},
 		text: {
 			type: String,
-			maxLength: 30,
 			required: true,
+			maxLength: 300,
 		},
 	},
 	{ timestamps: true },
