@@ -8,7 +8,7 @@ import User from '../models/user';
 
 export async function getComments(req: Request, res: Response) {
 	const page = Number(req.query.page) || 1;
-	const limit = Number(req.query.limit) || 8;
+	const limit = Number(req.query.limit) || 6;
 	const skip = (page - 1) * limit;
 
 	const { recipeID } = req.params;
@@ -17,7 +17,11 @@ export async function getComments(req: Request, res: Response) {
 	if (!recipe) {
 		throw new BadRequest('Recipe not found!');
 	}
-	const comments = await Comment.find({ recipeID: recipeID }).skip(skip).limit(limit);
+	const comments = await Comment.find({ recipeID: recipeID })
+		.skip(skip)
+		.limit(limit)
+		.populate({ path: 'createdBy', select: 'name profilePicture' })
+		.sort('-createdAt');
 	const totalComments = await Comment.countDocuments({ recipeID });
 
 	res.status(StatusCodes.OK).json({ success: true, page: page, limit, total: totalComments, data: comments });
@@ -35,6 +39,7 @@ export async function createComment(req: Request, res: Response) {
 	if (!user) throw new BadRequest('User not found!');
 
 	const comment = await Comment.create({ recipeID: recipeID, createdBy: userID, profilePicture: user.profilePicture, username: user.name, text: text });
+	await Recipe.findByIdAndUpdate(recipeID, { $inc: { commentsCount: 1 } });
 
 	res.status(StatusCodes.CREATED).json({ success: true, created: comment });
 }
@@ -79,6 +84,8 @@ export async function deleteComment(req: Request, res: Response) {
 	if (!deletedComment) {
 		throw new Forbidden('You dont own this comment');
 	}
+
+	await Recipe.findByIdAndUpdate(recipeID, { $inc: { likesCount: -1 } });
 
 	res.status(StatusCodes.OK).json({ success: true, deleted: deletedComment });
 }
