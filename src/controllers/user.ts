@@ -5,6 +5,8 @@ import User from '../models/user';
 import Recipe from '../models/recipe';
 import NotFound from '../errors/notFound';
 import Unauthenticated from '../errors/unauthenticated';
+import { compareValue } from '../utils/bcrypt';
+import BadRequest from '../errors/badRequest';
 
 export async function getLoggedInUserInfo(req: Request, res: Response) {
 	const { userID } = req.user;
@@ -33,15 +35,21 @@ export async function getUserInfo(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
 	const { userID } = req.params;
-	const { name, profilePicture, bio, email, password } = req.body;
+	const { name, profilePicture, bio, email, newPassword, currentPassword } = req.body;
 	const loggedUserID = req.user.userID.toString();
 
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
-
 	if (userID !== loggedUserID) throw new Unauthenticated('You cannot update another user profile.');
 
-	const updatedUser = await User.findByIdAndUpdate(userID, { name, profilePicture, bio, email, password }, { new: true });
+	const updateData: any = { name, profilePicture, bio, email };
+	if (currentPassword && newPassword) {
+		const isPasswordEqual = await compareValue(currentPassword, user.password);
+		if (!isPasswordEqual) throw new Unauthenticated('This Password does not match with your current password');
+		updateData.password = newPassword;
+	}
+
+	const updatedUser = await User.findByIdAndUpdate(userID, updateData, { new: true, runValidators: true });
 
 	res.status(StatusCodes.OK).json({ data: updatedUser });
 }
