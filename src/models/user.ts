@@ -43,11 +43,21 @@ const userSchema = new mongoose.Schema<IUser>({
 			{ _id: false },
 		),
 		default: {},
-	}
+	},
 });
 
 userSchema.pre('save', async function () {
 	return (this.password = await hashValue(this.password));
+});
+
+userSchema.pre('findOneAndUpdate', async function () {
+	const update = this.getUpdate() as any;
+
+	if (update.password) {
+		const hashed = await hashValue(update.password);
+		update.password = hashed;
+		this.setUpdate(update);
+	}
 });
 
 userSchema.methods.createToken = function () {
