@@ -10,16 +10,16 @@ export async function getAllRecipes(req: Request, res: Response) {
 	const limit = Number(req.query.limit) || 12;
 	const skip = (page - 1) * limit;
 
-	const featuredRecipes = await Recipe.find({ visibility: 'Public' }).sort('-likesCount -createdAt').limit(3);
+	const featuredRecipes = await Recipe.find({ visibility: 'public' }).sort('-likesCount -createdAt').limit(3);
 	const featuredIds = featuredRecipes.map((recipe) => recipe._id);
 
-	const recipes = await Recipe.find({ visibility: 'Public', _id: { $nin: featuredIds } }) // $nin para tirar os featured, já que vão ficar na seção de cima do layout do myrecipes
+	const recipes = await Recipe.find({ visibility: 'public', _id: { $nin: featuredIds } }) // $nin para tirar os featured, já que vão ficar na seção de cima do layout do myrecipes
 		.populate('createdBy', 'name profilePicture')
 		.sort('-likesCount -createdAt')
 		.skip(skip)
 		.limit(limit);
 
-	const totalRecipes = (await Recipe.countDocuments({ visibility: 'Public' })) - 3; // -3 por causa do featured.
+	const totalRecipes = (await Recipe.countDocuments({ visibility: 'public' })) - 3; // -3 por causa do featured.
 
 	res.status(StatusCodes.OK).json({ success: true, page, limit, total: totalRecipes, data: recipes });
 }

@@ -34,8 +34,8 @@ const recipeSchema = new mongoose.Schema(
 		},
 		visibility: {
 			type: String,
-			enum: ['Public', 'Private'],
-			default: 'Public',
+			enum: ['public', 'private'],
+			default: 'public',
 		},
 		cookingTime: {
 			type: Number,
