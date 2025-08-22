@@ -15,7 +15,6 @@ export const recipeSchema = Joi.object({
 			Joi.object({
 				name: Joi.string().trim().required(),
 				quantity: Joi.string().trim().required(),
-				unit: Joi.string().trim().optional(),
 			}),
 		)
 		.min(1)
