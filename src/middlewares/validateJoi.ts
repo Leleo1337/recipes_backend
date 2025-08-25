@@ -1,16 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import BadRequest from '../errors/badRequest';
+import { StatusCodes } from 'http-status-codes';
+import { Schema } from 'joi';
 
-function validate(schema: any) {
+function validate(schema: any): any {
 	return (req: Request, res: Response, next: NextFunction) => {
 		const { error } = schema.validate(req.body);
 
 		if (error) {
-			throw new BadRequest(error.details[0].message);
+			const errors = error.details.map((d: any) => ({
+				msg: d.message,
+				field: d.path[0],
+				type: d.type,
+				limit: d.context?.limit ?? null,
+			}));
+			return res.status(StatusCodes.BAD_REQUEST).json({ errors });
 		}
 
 		next();
 	};
 }
 
-export default validate
+export default validate;
