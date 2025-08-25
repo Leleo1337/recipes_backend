@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema<IUser>({
 		required: true,
 		match: [
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-			'Insert a valid email',
+			'Insira um E-mail válido',
 		],
 		unique: true,
 	},
@@ -34,15 +34,17 @@ const userSchema = new mongoose.Schema<IUser>({
 		default: '',
 	},
 	socialLinks: {
-		type: new mongoose.Schema(
-			{
-				facebook: { type: String },
-				instagram: { type: String },
-				discord: { type: String },
-			},
-			{ _id: false },
-		),
-		default: {},
+		discord: {
+			type: String,
+		},
+		instagram: {
+			type: String,
+			match: [/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/, 'URL do Instagram inválida'],
+		},
+		facebook: {
+			type: String,
+			match: [/^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9_.]+\/?$/, 'URL do Facebook inválida'],
+		},
 	},
 });
 
