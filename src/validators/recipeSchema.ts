@@ -23,7 +23,7 @@ export const recipeSchema = Joi.object({
 		.items(
 			Joi.object({
 				step: Joi.number().integer().min(1).required(),
-				description: Joi.string().trim().min(5).required(),
+				description: Joi.string().trim().min(1).required(),
 			}),
 		)
 		.min(1)
