@@ -4,7 +4,7 @@ import Like from '../models/like';
 import User from '../models/user';
 import Recipe from '../models/recipe';
 import NotFound from '../errors/notFound';
-import Unauthenticated from '../errors/unauthenticated';
+import Unauthorized from '../errors/unauthorized';
 import { compareValue } from '../utils/bcrypt';
 import BadRequest from '../errors/badRequest';
 
@@ -12,7 +12,7 @@ export async function getLoggedInUserInfo(req: Request, res: Response) {
 	const { userID } = req.user;
 
 	const user = await User.findById(userID).select('-password -__v -email');
-	if (!user) throw new Unauthenticated('You must be logged!');
+	if (!user) throw new Unauthorized('You must be logged!');
 
 	res.status(StatusCodes.OK).json({ user });
 }
@@ -35,17 +35,17 @@ export async function getUserInfo(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
 	const { userID } = req.params;
-	const { name, profilePicture, bio, email, newPassword, currentPassword } = req.body;
+	const { name, profilePicture, bio, email, newPassword, currentPassword, socialLinks } = req.body;
 	const loggedUserID = req.user.userID.toString();
 
 	const user = await User.findById(userID);
 	if (!user) throw new NotFound('User not found');
-	if (userID !== loggedUserID) throw new Unauthenticated('You cannot update another user profile.');
+	if (userID !== loggedUserID) throw new Unauthorized('You cannot update another user profile.');
 
-	const updateData: any = { name, profilePicture, bio, email };
+	const updateData: any = { name, profilePicture, bio, email, socialLinks };
 	if (currentPassword && newPassword) {
 		const isPasswordEqual = await compareValue(currentPassword, user.password);
-		if (!isPasswordEqual) throw new Unauthenticated('This Password does not match with your current password');
+		if (!isPasswordEqual) throw new BadRequest('This Password does not match with your current password');
 		updateData.password = newPassword;
 	}
 
