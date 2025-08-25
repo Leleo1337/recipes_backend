@@ -3,8 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import Comment from '../models/comment';
 import Recipe from '../models/recipe';
 import BadRequest from '../errors/badRequest';
-import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
+import Forbidden from '../errors/forbidden';
 
 export async function getComments(req: Request, res: Response) {
 	const page = Number(req.query.page) || 1;

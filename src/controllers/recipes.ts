@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Recipe from '../models/recipe';
 import NotFound from '../errors/notFound';
-import Forbidden from '../errors/Forbidden';
 import User from '../models/user';
+import Forbidden from '../errors/forbidden';
 
 export async function getAllRecipes(req: Request, res: Response) {
 	const page = Number(req.query.page) || 1;
