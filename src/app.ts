@@ -6,7 +6,7 @@ import auth from './routes/auth';
 import recipes from './routes/recipes';
 import user from './routes/user';
 import comments from './routes/comments';
-import likes from './routes/likes'
+import likes from './routes/likes';
 
 import rateLimiter from './middlewares/rateLimiter';
 import errorHandlerMiddleware from './middlewares/errorHandler';
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/recipes', recipes);
 app.use('/api/v1/recipes/:recipeID/comments', comments);
-app.use('/api/v1/recipes/:recipeID/like', likes)
+app.use('/api/v1/recipes/:recipeID/like', likes);
 app.use('/api/v1/user', user);
 
 app.use(routeNotFound);
