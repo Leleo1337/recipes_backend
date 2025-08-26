@@ -4,6 +4,8 @@ import Recipe from '../models/recipe';
 import NotFound from '../errors/notFound';
 import User from '../models/user';
 import Forbidden from '../errors/forbidden';
+import Like from '../models/like';
+import Comment from '../models/comment';
 
 export async function getAllRecipes(req: Request, res: Response) {
 	const page = Number(req.query.page) || 1;
@@ -110,6 +112,8 @@ export async function deleteRecipe(req: Request, res: Response) {
 	if (!deletedRecipe) {
 		throw new Forbidden('You dont own this recipe');
 	}
+	await Like.deleteMany({ recipeID: recipeID });
+	await Comment.deleteMany({ recipeID: recipeID });
 
 	res.status(StatusCodes.OK).json({ success: true, deleted: deletedRecipe });
 }
