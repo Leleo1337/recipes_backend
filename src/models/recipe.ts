@@ -32,6 +32,10 @@ const recipeSchema = new mongoose.Schema(
 			default: 'medio',
 			required: true,
 		},
+		videoUrl: {
+			type: String,
+			required: false,
+		},
 		visibility: {
 			type: String,
 			enum: ['public', 'private'],
