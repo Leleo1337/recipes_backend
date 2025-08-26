@@ -62,7 +62,7 @@ export async function getRecipe(req: Request, res: Response) {
 export async function createRecipe(req: Request, res: Response) {
 	const { userID } = req.user;
 	const user = await User.findById(userID);
-	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions } = req.body;
+	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions, videoUrl } = req.body;
 
 	if (!user) throw new NotFound('User not found!');
 	const newRecipe = await Recipe.create({
@@ -75,6 +75,7 @@ export async function createRecipe(req: Request, res: Response) {
 		visibility,
 		cookingTime,
 		portions,
+		videoUrl,
 		ingredients,
 		instructions,
 	});
@@ -83,13 +84,13 @@ export async function createRecipe(req: Request, res: Response) {
 }
 
 export async function editRecipe(req: Request, res: Response) {
-	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions } = req.body;
+	const { image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions, videoUrl } = req.body;
 	const { recipeID } = req.params;
 	const { userID } = req.user;
 
 	const editedRecipe = await Recipe.findOneAndUpdate(
 		{ _id: recipeID, createdBy: userID },
-		{ image, title, description, category, difficulty, visibility, cookingTime, portions, ingredients, instructions },
+		{ image, title, description, category, difficulty, visibility, cookingTime, videoUrl, portions, ingredients, instructions },
 		{ new: true, runValidators: true },
 	);
 
