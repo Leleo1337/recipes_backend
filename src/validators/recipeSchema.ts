@@ -2,13 +2,13 @@ import Joi from 'joi';
 
 export const recipeSchema = Joi.object({
 	image: Joi.string().uri().optional(),
-
 	title: Joi.string().trim().min(3).required(),
 	description: Joi.string().trim().required(),
 	category: Joi.string().valid('cafe da manha', 'almoço', 'jantar', 'entrada', 'sobremesa', 'bebida', 'lanche', 'outro').required(),
 	difficulty: Joi.string().valid('facil', 'medio', 'dificil').required(),
 	visibility: Joi.string().valid('public', 'private').optional(),
 	cookingTime: Joi.number().required(),
+	videoUrl: Joi.string().optional().allow(''),
 	portions: Joi.number().optional(),
 	ingredients: Joi.array()
 		.items(
