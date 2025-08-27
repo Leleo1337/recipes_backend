@@ -241,10 +241,10 @@ cp .env.example .env
 ```
 Edite o arquivo .env com suas configurações
 ```env
+MONGO_URI=SEUMONGOURI
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/recipesdb
-JWT_SECRET=seu_jwt_secret_super_seguro
-NODE_ENV=development
+JWT_SECRET=SUPERULTRAMEGASECRETO
+JWT_LIFETIME=TEMPODEVIDADOTOKEN
 ```
 
 Execute em desenvolvimento
@@ -262,7 +262,7 @@ npm start
 ## 💡 Exemplos de Uso
 
 **Exemplo 1: Criar e Autenticar Usuário**
-```javascript
+```typescript
 // Registrar usuário
 const response = await fetch('/api/v1/auth/register', {
   method: 'POST',
@@ -288,7 +288,7 @@ const { token } = await login.json();
 ```
 
 **Exemplo 2: Criar Receita**
-```
+```typescript
 const recipeData = {
   title: "Bolo de Chocolate",
   description: "Um delicioso bolo de chocolate",
@@ -333,7 +333,7 @@ A API retorna respostas padronizadas:
 ```
 {
   "msg": "Mensagem de erro descritiva",
-  "statusCode": 400
+  "statusCode": Codigo de erro
 }
 ```
 
