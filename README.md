@@ -1,4 +1,4 @@
-# API de Receitas
+# myRecipes API
 
 ## 📋 Índice
 - [Visão Geral](#-visão-geral)
