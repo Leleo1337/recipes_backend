@@ -7,7 +7,7 @@ interface IUser extends Document {
 	profilePicture?: string;
 	bio?: string;
 	socialLinks?: {
-		discord?: string;
+		tiktok?: string;
 		instagram?: string;
 		facebook?: string;
 	};

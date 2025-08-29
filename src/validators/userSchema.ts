@@ -10,8 +10,8 @@ export const userSchema = Joi.object({
 	newPassword: Joi.string().optional(),
 	currentPassword: Joi.string().optional(),
 	socialLinks: Joi.object({
-		discord: Joi.string().optional(),
-		instaram: Joi.string().uri().optional(),
-		facebook: Joi.string().uri().optional(),
+		tiktok: Joi.string().uri().optional().allow(''),
+		instagram: Joi.string().uri().optional().allow(''),
+		facebook: Joi.string().uri().optional().allow(''),
 	}),
 });
