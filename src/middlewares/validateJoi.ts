@@ -9,7 +9,7 @@ function validate(schema: any): any {
 		if (error) {
 			const errors = error.details.map((d: any) => ({
 				msg: d.message,
-				field: d.path[0],
+				field: d.path[d.path.length - 1],
 				type: d.type,
 				limit: d.context?.limit ?? null,
 			}));
