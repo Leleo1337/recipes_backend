@@ -34,16 +34,20 @@ const userSchema = new mongoose.Schema<IUser>({
 		default: '',
 	},
 	socialLinks: {
-		discord: {
+		tiktok: {
 			type: String,
+			match: [/^(?:https?:\/\/)?(?:www\.)?tiktok\.com\/@([a-zA-Z0-9._]{1,24})\/?$/, 'Insira um link valido do seu perfil para o Tiktok'],
 		},
 		instagram: {
 			type: String,
-			match: [/^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/, 'URL do Instagram inválida'],
+			match: [/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9._]{1,30})\/?$/, 'Insira um link valido do seu perfil para o Instagram'],
 		},
 		facebook: {
 			type: String,
-			match: [/^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9_.]+\/?$/, 'URL do Facebook inválida'],
+			match: [
+				/(?:https?:)?\/\/(?:www\.)?(?:facebook|fb)\.com\/(?<profile>(?![A-z]+\.php)(?!marketplace|gaming|watch|me|messages|help|search|groups)[A-z0-9_\-\.]+)\/?/,
+				'Insira um link valido do seu perfil para o Facebook',
+			],
 		},
 	},
 });
