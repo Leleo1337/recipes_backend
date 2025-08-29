@@ -33,7 +33,7 @@ function errorHandlerMiddleware(err: any, req: Request, res: Response, next: Nex
 	
 	console.log(err)
 
-	return res.status(customError.statusCode).json({ msg: customError.msg });
+	return res.status(customError.statusCode).json({ msg: customError.msg, statusCode: customError.statusCode });
 }
 
 export default errorHandlerMiddleware;
