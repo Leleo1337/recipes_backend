@@ -6,7 +6,7 @@ export const userSchema = Joi.object({
 	}),
 	name: Joi.string().optional(),
 	email: Joi.string().email(),
-	bio: Joi.string().optional(),
+	bio: Joi.string().optional().allow(''),
 	newPassword: Joi.string().optional(),
 	currentPassword: Joi.string().optional(),
 	socialLinks: Joi.object({
