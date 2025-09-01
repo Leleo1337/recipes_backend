@@ -226,7 +226,7 @@ Authorization: Bearer <seu_token_jwt>
 ### Instalação
 Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/recipes-api.git
+git clone https://github.com/Leleo1337/recipes_backend.git
 cd recipes-api
 ```
 
